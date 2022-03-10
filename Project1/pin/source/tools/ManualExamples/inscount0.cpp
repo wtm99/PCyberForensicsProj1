@@ -18,6 +18,8 @@ ofstream OutFile;
 // make it static to help the compiler optimize docount
 static UINT64 icount = 0;
 
+void docount() {icount++;}
+
 // This function is called before every instruction is executed
 VOID printStatus(VOID* ip,
 		ADDRINT* regEAX,
@@ -35,6 +37,7 @@ VOID printStatus(VOID* ip,
 // Pin calls this function every time a new instruction is encountered
 VOID Instruction(INS ins, VOID* v)
 {
+     INS_InsertCall(ins, IPOINT_BEFORE, (AFUNPTR) docount);
      ADDRINT addr = INS_Address(ins);
      if (addr == 0x455BD3)
      {
